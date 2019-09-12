@@ -1,0 +1,12 @@
+{
+    "name": "jarenal/web-test",
+    "type": "project",
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "Jose Antonio",
+            "email": "jguidos@hotmail.com"
+        }
+    ],
+    "require": {}
+}
