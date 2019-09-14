@@ -5,8 +5,18 @@ database:
   name: "web-test"
   port: "3306"
 routes:
-  home:
-    controller: Jarenal\App\Controller\Home
-    action: "index"
+  step1:
+    controller: Jarenal\App\Controller\Steps
+    action: "step1"
     method: "GET"
     pattern: "/"
+  step2:
+    controller: Jarenal\App\Controller\Steps
+    action: "step2"
+    method: "POST"
+    pattern: "/step2"
+  step3:
+    controller: Jarenal\App\Controller\Steps
+    action: "step3"
+    method: "POST"
+    pattern: "/step3"

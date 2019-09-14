@@ -10,6 +10,9 @@ services:
       - ./:/var/www:consistent
     environment:
       ERRORS: 1
+      ENABLE_XDEBUG: 1
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_autostart=1 default_enable=0 remote_enable=1 remote_connect_back=0 remote_port=9005 idekey=PHPSTORM"
+      PHP_IDE_CONFIG: serverName=PHPSTORM
   db:
     build:
       context: .

@@ -15,8 +15,9 @@ class Kernel implements KernelInterface
     {
         $route = $this->router->getRoute();
         $view = new View();
+        $session = new Session();
         $reflector = new \ReflectionClass($route->getController());
-        $controller = $reflector->newInstanceArgs([$view]);
+        $controller = $reflector->newInstanceArgs([$view, $session]);
         $output = call_user_func([$controller, $route->getAction()]);
         exit($output);
     }
