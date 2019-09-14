@@ -1,5 +1,5 @@
 database:
-  host: "localhost"
+  host: "db"
   username: "root"
   password: "1234"
   name: "web-test"
