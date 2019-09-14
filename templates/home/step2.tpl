@@ -13,7 +13,9 @@
 <body>
 <div class="container">
 	<h1>{title}</h1>
-	<a href="/step3">Next step</a>
+	<form action="/step3" method="post">
+		<button type="submit">Next step</button>
+	</form>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

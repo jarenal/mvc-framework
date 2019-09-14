@@ -2,6 +2,8 @@
 
 namespace Jarenal\App\Controller;
 
+use Jarenal\App\Model\Quote;
+use Jarenal\App\Model\User;
 use Jarenal\Core\ControllerAbstract;
 
 class Steps extends ControllerAbstract
@@ -19,8 +21,22 @@ class Steps extends ControllerAbstract
 
     public function step3()
     {
-        $user = $this->session->get("user");
-        var_dump($user);
+        $data = $this->session->get("user");
+        var_dump($data);
+
+        $user = new User($this->database);
+        $user->setName($data["name"])
+            ->setPassword($data["password"])
+            ->setEmail($data["email"])
+            ->setPhone($data["phone"])
+            ->save();
+
+        $quote = new Quote($this->database);
+        $quote->setUser($user)
+            ->setReference(uniqid("Q-"))
+            ->setTotal(123.45)
+            ->save();
+
         return $this->view->render("home/step3.tpl", ["title" => "3- Thank you!"]);
     }
 }

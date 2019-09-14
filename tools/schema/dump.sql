@@ -142,7 +142,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `password` varchar(20) COLLATE utf8_bin NOT NULL,
+  `password` varchar(60) COLLATE utf8_bin NOT NULL,
   `email` varchar(255) COLLATE utf8_bin NOT NULL,
   `phone` varchar(20) COLLATE utf8_bin NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
