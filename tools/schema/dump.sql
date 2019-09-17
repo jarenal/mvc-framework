@@ -71,6 +71,12 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (1, 1, 'Subscription #1', 10);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (2, 1, 'Subscription #2', 20);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (3, 2, 'Service #1', 15);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (4, 2, 'Service #2', 30);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (5, 3, 'Goods #1', 50);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (6, 3, 'Goods #2', 100);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
