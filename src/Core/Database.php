@@ -4,6 +4,7 @@ namespace Jarenal\Core;
 
 use Exception;
 use mysqli;
+use mysqli_result;
 
 class Database implements DatabaseInterface
 {
@@ -52,7 +53,7 @@ class Database implements DatabaseInterface
         }
     }
 
-    public function executeQuery($sql, $params = [])
+    public function executeQuery($sql, $params = []): mysqli_result
     {
         try {
             if (!$this->connected) {

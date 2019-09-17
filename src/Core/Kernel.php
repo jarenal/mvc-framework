@@ -2,6 +2,9 @@
 
 namespace Jarenal\Core;
 
+use mysqli;
+use ReflectionClass;
+
 class Kernel implements KernelInterface
 {
     private $router;
@@ -17,8 +20,8 @@ class Kernel implements KernelInterface
         $view = new View();
         $session = new Session();
         $config = new Config(PROJECT_ROOT_DIR."/config/config.yaml");
-        $database = new Database(new \mysqli(), $config);
-        $reflector = new \ReflectionClass($route->getController());
+        $database = new Database(new mysqli(), $config);
+        $reflector = new ReflectionClass($route->getController());
         $controller = $reflector->newInstanceArgs([$view, $session, $database]);
         $output = call_user_func([$controller, $route->getAction()]);
         exit($output);

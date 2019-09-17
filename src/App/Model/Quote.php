@@ -42,7 +42,7 @@ class Quote extends ModelAbstract implements ModelInterface
      * @param mixed $user
      * @return Quote
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
         return $this;
