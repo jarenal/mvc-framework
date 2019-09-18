@@ -53,6 +53,6 @@ class Category extends ModelAbstract implements ModelInterface
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string)strtolower($this->name);
     }
 }

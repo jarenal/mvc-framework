@@ -20,7 +20,7 @@ class ProductQueries
         $products = [];
         while ($row = $result->fetch_object()) {
             $categoryQueries = new CategoryQueries($this->database);
-            $category = $categoryQueries->findById($row->id);
+            $category = $categoryQueries->findById($row->category_id);
             $currentProduct = new Product($this->database);
             $currentProduct->setId($row->id)
                 ->setName($row->name)
