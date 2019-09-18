@@ -50,4 +50,9 @@ class Category extends ModelAbstract implements ModelInterface
     {
         // TODO: Implement save() method.
     }
+
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
 }

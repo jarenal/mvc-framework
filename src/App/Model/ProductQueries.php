@@ -25,7 +25,8 @@ class ProductQueries
             $currentProduct->setId($row->id)
                 ->setName($row->name)
                 ->setCategory($category)
-                ->setPrice($row->price);
+                ->setPrice($row->price)
+                ->setDescription($row->description);
             $products[] = $currentProduct;
         }
         return $products;

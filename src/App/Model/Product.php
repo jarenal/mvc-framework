@@ -7,10 +7,11 @@ use Jarenal\Core\ModelInterface;
 
 class Product extends ModelAbstract implements ModelInterface
 {
-    private $id;
-    private $category;
-    private $name;
-    private $price;
+    public $id;
+    public $category;
+    public $name;
+    public $price;
+    public $description;
 
     /**
      * @return mixed
@@ -84,8 +85,31 @@ class Product extends ModelAbstract implements ModelInterface
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     * @return Product
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
     public function save()
     {
         // TODO: Implement save() method.
+    }
+
+    public function __toString()
+    {
+        return (string)$this->name;
     }
 }

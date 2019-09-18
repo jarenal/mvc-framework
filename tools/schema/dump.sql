@@ -59,10 +59,11 @@ CREATE TABLE `product` (
   `category_id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `price` decimal(5,2) NOT NULL,
+  `description` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product_category_idx` (`category_id`),
   CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,12 +72,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (1, 1, 'Subscription #1', 10);
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (2, 1, 'Subscription #2', 20);
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (3, 2, 'Service #1', 15);
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (4, 2, 'Service #2', 30);
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (5, 3, 'Goods #1', 50);
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`) VALUES (6, 3, 'Goods #2', 100);
+INSERT INTO `product` VALUES (1,1,'Subscription #1',10.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(2,1,'Subscription #2',20.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(3,2,'Service #1',30.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(4,2,'Service #2',40.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(5,3,'Goods #1',50.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(6,3,'Goods #2',60.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +144,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `password` varchar(60) COLLATE utf8_bin NOT NULL,
+  `password` varchar(20) COLLATE utf8_bin NOT NULL,
   `email` varchar(255) COLLATE utf8_bin NOT NULL,
   `phone` varchar(20) COLLATE utf8_bin NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -175,4 +171,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-12 14:12:42
+-- Dump completed on 2019-09-17 22:38:36
