@@ -8,15 +8,20 @@ routes:
   step1:
     controller: Jarenal\App\Controller\Steps
     action: "step1"
-    method: "GET"
+    method: ["GET"]
     pattern: "/"
   step2:
     controller: Jarenal\App\Controller\Steps
     action: "step2"
-    method: "POST"
+    method: ["GET", "POST"]
     pattern: "/step2"
   step3:
     controller: Jarenal\App\Controller\Steps
     action: "step3"
-    method: "POST"
+    method: ["POST"]
     pattern: "/step3"
+  products:
+    controller: Jarenal\App\Controller\Api
+    action: "products"
+    method: ["POST"]
+    pattern: "/api/products"

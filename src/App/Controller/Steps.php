@@ -19,12 +19,13 @@ class Steps extends ControllerAbstract
 
     public function step2()
     {
+        $cart = $this->session->get("cart", []);
         $this->session->set("user", $_POST["user"]);
         $config = new Config(PROJECT_ROOT_DIR."/config/config.yaml");
         $database = new Database(new mysqli(), $config);
         $productQueries = new ProductQueries($database);
         $products = $productQueries->findAll();
-        return $this->view->render("steps/step2.tpl", ["title" => "2- Choose your products", "products" => $products]);
+        return $this->view->render("steps/step2.tpl", ["title" => "2- Choose your products", "products" => $products, "cart_counter" => count($cart)]);
     }
 
     public function step3()

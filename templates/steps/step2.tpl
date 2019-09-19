@@ -31,15 +31,17 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col-sm text-left">
-			<h3><span id="products-counter">0</span> products in your cart</h3>
+			<h3><span id="cart-counter">{cart_counter}</span> products in your cart</h3>
 		</div>
 		<div class="col-sm text-right">
 			<form action="/step3" method="post">
-				<button type="submit" class="btn btn-success" disabled="disabled">Get quote!</button>
+				<button id="btn-get-quote" type="submit" class="btn btn-success" disabled="disabled">Get quote!</button>
 			</form>
 		</div>
 	</div>
 </div>
+
+<!-- Subscription Modal -->
 <div class="modal fade" id="subscription" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -52,6 +54,8 @@
 				<div class="modal-body">
 					<p>Select the dates</p>
 					<form novalidate>
+						<input type="hidden" name="product_id" class="product_id" value=""/>
+						<input type="hidden" name="category" class="category" value=""/>
 						<div class="form-group">
 							<label for="start_date">Start date</label>
 							<input id="start_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="start_date" pattern="([0][1-9]|[12][0-9]|[3][0-1])\/([0][1-9]|[1][0-2])\/\d{4}" required>
@@ -69,6 +73,8 @@
 		</div>
 	</div>
 </div>
+
+<!-- Service Modal -->
 <div class="modal fade" id="service" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -80,6 +86,8 @@
 				</div>
 				<div class="modal-body">
 					<form novalidate>
+						<input type="hidden" name="product_id" class="product_id" value=""/>
+						<input type="hidden" name="category" class="category" value=""/>
 						<div class="form-group">
 							<label for="dayofweek">Day of week</label>
 							<select id="dayofweek" name="dayofweek" class="form-control" required>
@@ -137,6 +145,8 @@
 		</div>
 	</div>
 </div>
+
+<!-- Goods Modal -->
 <div class="modal fade" id="goods" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -163,7 +173,10 @@
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="js/app.js"></script>

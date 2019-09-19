@@ -1,8 +1,13 @@
 (function () {
+    checkGetQuoteButton();
+
     $(document).off("click", ".btn-add").on("click", ".btn-add", function (e) {
         e.preventDefault();
-        $(".modal-title").html($(this).data("name"));
-        $("#" + $(this).data("category")).modal();
+        let $modal = $("#" + $(this).data("category"));
+        $modal.find(".modal-title").html($(this).data("name"));
+        $modal.find(".product_id").val($(this).data("id"));
+        $modal.find(".category").val($(this).data("category"));
+        $modal.modal();
     });
 
     $(document).off("change", "#start_time").on("change", "#start_time", function (e) {
@@ -42,8 +47,10 @@
                 break;
             case "end_date":
                 if (e.type === "keyup") {
-                    let startDate = new Date($(this).parents("form").find("#start_date").val());
-                    let endDate = new Date($(this).val());
+                    let startDateChunks = $(this).parents("form").find("#start_date").val().split("/").reverse();
+                    let startDate = new Date(startDateChunks.join("-"));
+                    let endDateChunks = $(this).val().split("/").reverse();
+                    let endDate = new Date(endDateChunks.join("-"));
                     if (dateFormatPattern.test($(this).val()) && endDate > startDate) {
                         $(this).removeClass("is-invalid").addClass("is-valid");
                         this.setCustomValidity("");
@@ -119,6 +126,34 @@
         }
     });
 
+    $(document).off("click", "#subscription .btn-primary").on("click", "#subscription .btn-primary", function (e) {
+        let data = {product: {}};
+        data.product.id = $("#subscription .product_id").val();
+        data.product.category = $("#subscription .category").val();
+        data.product.start_date = $("#subscription #start_date").val();
+        data.product.end_date = $("#subscription #end_date").val();
+        addProduct(data);
+    });
+
+    $(document).off("click", "#service .btn-primary").on("click", "#service .btn-primary", function (e) {
+        let data = {product: {}};
+        data.product.id = $("#service .product_id").val();
+        data.product.category = $("#service .category").val();
+        data.product.dayofweek = $("#service #dayofweek").val();
+        data.product.start_time = $("#service #start_time").val();
+        data.product.end_time = $("#service #end_time").val();
+        data.product.weeks = $("#service #weeks").val();
+        addProduct(data);
+    });
+
+    $(document).off("click", "#goods .btn-primary").on("click", "#goods .btn-primary", function (e) {
+        let data = {product: {}};
+        data.product.id = $("#goods .product_id").val();
+        data.product.category = $("#goods .category").val();
+        data.product.quantity = $("#goods #quantity").val();
+        addProduct(data);
+    });
+
     function updateForm($element)
     {
         let form = $element.parents("form").get(0);
@@ -127,6 +162,39 @@
             $modal.find(".modal-footer .btn-primary").prop("disabled", true);
         } else {
             $modal.find(".modal-footer .btn-primary").prop("disabled", false);
+        }
+    }
+
+    function addProduct(data)
+    {
+        $.ajax("/api/products", {
+            method: "POST",
+            dataType: "json",
+            data: data
+        })
+        .done(function (data, textStatus, jqXHR) {
+            if (data.code) {
+                alert(data.message)
+            } else {
+                $("#cart-counter").html(data.cart_counter);
+            }
+            $(".modal").modal("hide");
+        })
+        .fail(function (jqXHR, textSatus, errorThrown) {
+            alert(errorThrown);
+        })
+        .always(function () {
+            checkGetQuoteButton();
+        });
+    }
+
+    function checkGetQuoteButton()
+    {
+        let cartCounter = parseInt($("#cart-counter").html());
+        if (cartCounter > 0) {
+            $("#btn-get-quote").prop("disabled", false);
+        } else {
+            $("#btn-get-quote").prop("disabled", true);
         }
     }
 })();

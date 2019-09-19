@@ -10,9 +10,13 @@ class Session implements SessionInterface
         $_SESSION[$param] = $value;
     }
 
-    public function get($param)
+    public function get($param, $default)
     {
-        return $_SESSION[$param];
+        if (isset($_SESSION[$param])) {
+            return $_SESSION[$param];
+        } else {
+            return $default;
+        }
     }
 
     public function has($param): bool
