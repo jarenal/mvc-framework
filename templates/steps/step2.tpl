@@ -16,7 +16,7 @@
 	<div class="row">
         {% foreach(products as product) %}
 		<div class="col-sm">
-			<div class="card mt-3" style="width: 18rem;">
+			<div class="card mt-3 mx-auto" style="width: 18rem;">
 				<img src="images/dummy-product.png" class="card-img-top" alt="...">
 				<div class="card-body">
 					<h5 class="card-title">{product.name}</h5>
@@ -29,9 +29,16 @@
 		</div>
         {% endforeach %}
 	</div>
-	<form action="/step3" method="post">
-		<button type="submit">Next step</button>
-	</form>
+	<div class="row mt-4">
+		<div class="col-sm text-left">
+			<h3><span id="products-counter">0</span> products in your cart</h3>
+		</div>
+		<div class="col-sm text-right">
+			<form action="/step3" method="post">
+				<button type="submit" class="btn btn-success" disabled="disabled">Get quote!</button>
+			</form>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="subscription" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -44,20 +51,20 @@
 				</div>
 				<div class="modal-body">
 					<p>Select the dates</p>
-					<form method="post" action="/step2">
+					<form novalidate>
 						<div class="form-group">
 							<label for="start_date">Start date</label>
-							<input id="start_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="start_date">
+							<input id="start_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="start_date" pattern="([0][1-9]|[12][0-9]|[3][0-1])\/([0][1-9]|[1][0-2])\/\d{4}" required>
 						</div>
 						<div class="form-group">
 							<label for="end_date">End date</label>
-							<input id="end_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="end_date">
+							<input id="end_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="end_date" required>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary">Add to cart</button>
+					<button type="button" class="btn btn-primary" disabled="disabled">Add to cart</button>
 				</div>
 		</div>
 	</div>
@@ -72,10 +79,11 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form method="post" action="/step2">
+					<form novalidate>
 						<div class="form-group">
 							<label for="dayofweek">Day of week</label>
-							<select id="dayofweek" name="dayofweek" class="form-control">
+							<select id="dayofweek" name="dayofweek" class="form-control" required>
+								<option value="">--</option>
 								<option value="1">Monday</option>
 								<option value="2">Tuesday</option>
 								<option value="3">Wednesday</option>
@@ -86,7 +94,7 @@
 						</div>
 						<div class="form-group">
 							<label for="start_time">From</label>
-							<select id="start_time" name="start_time" class="form-control">
+							<select id="start_time" name="start_time" class="form-control" required>
 								<option value="">--</option>
 								<option value="9">9:00</option>
 								<option value="10">10:00</option>
@@ -102,7 +110,8 @@
 						</div>
 						<div class="form-group">
 							<label for="end_time">To</label>
-							<select id="end_time" name="end_time" class="form-control" disabled>
+							<select id="end_time" name="end_time" class="form-control" required disabled>
+								<option value="">--</option>
 								<option value="10">10:00</option>
 								<option value="11">11:00</option>
 								<option value="12">12:00</option>
@@ -117,13 +126,13 @@
 						</div>
 						<div class="form-group">
 							<label for="weeks">Weeks</label>
-							<input id="weeks" type="text" class="form-control" name="weeks">
+							<input id="weeks" type="text" class="form-control" name="weeks" required>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add to cart</button>
+					<button type="button" class="btn btn-primary" disabled="disabled">Add to cart</button>
 				</div>
 		</div>
 	</div>
@@ -138,7 +147,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="post" action="/step2">
+				<form novalidate>
 					<div class="form-group">
 						<label for="quantity">Quantity</label>
 						<input id="quantity" type="text" class="form-control" name="quantity">
@@ -147,7 +156,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Add to cart</button>
+				<button type="button" class="btn btn-primary" disabled="disabled">Add to cart</button>
 			</div>
 		</div>
 	</div>
