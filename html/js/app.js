@@ -127,30 +127,32 @@
     });
 
     $(document).off("click", "#subscription .btn-primary").on("click", "#subscription .btn-primary", function (e) {
-        let data = {product: {}};
-        data.product.id = $("#subscription .product_id").val();
-        data.product.category = $("#subscription .category").val();
-        data.product.start_date = $("#subscription #start_date").val();
-        data.product.end_date = $("#subscription #end_date").val();
+        let data = {};
+        data.id = $("#subscription .product_id").val();
+        data.quantity = 1;
+        data.metadata = {};
+        data.metadata.start_date = $("#subscription #start_date").val();
+        data.metadata.end_date = $("#subscription #end_date").val();
         addProduct(data);
     });
 
     $(document).off("click", "#service .btn-primary").on("click", "#service .btn-primary", function (e) {
-        let data = {product: {}};
-        data.product.id = $("#service .product_id").val();
-        data.product.category = $("#service .category").val();
-        data.product.dayofweek = $("#service #dayofweek").val();
-        data.product.start_time = $("#service #start_time").val();
-        data.product.end_time = $("#service #end_time").val();
-        data.product.weeks = $("#service #weeks").val();
+        let data = {};
+        data.id = $("#service .product_id").val();
+        data.quantity = 1;
+        data.metadata = {};
+        data.metadata.dayofweek = $("#service #dayofweek").val();
+        data.metadata.start_time = $("#service #start_time").val();
+        data.metadata.end_time = $("#service #end_time").val();
+        data.metadata.weeks = $("#service #weeks").val();
         addProduct(data);
     });
 
     $(document).off("click", "#goods .btn-primary").on("click", "#goods .btn-primary", function (e) {
-        let data = {product: {}};
-        data.product.id = $("#goods .product_id").val();
-        data.product.category = $("#goods .category").val();
-        data.product.quantity = $("#goods #quantity").val();
+        let data = {};
+        data.id = $("#goods .product_id").val();
+        data.quantity = $("#goods #quantity").val();
+        data.metadata = {};
         addProduct(data);
     });
 

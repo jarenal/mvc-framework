@@ -4,7 +4,7 @@ namespace Jarenal\App\Model;
 
 use Jarenal\Core\DatabaseInterface;
 
-class CategoryQueries
+class UserQueries
 {
     private $database;
 
@@ -15,15 +15,17 @@ class CategoryQueries
 
     public function findById($id)
     {
-        $sql = "SELECT * FROM `category` WHERE id=%s";
+        $sql = "SELECT * FROM `user` WHERE id=%s";
         $result = $this->database->executeQuery($sql, [$id]);
         $row = $result->fetch_object();
 
         if ($row) {
-            $category = new Category($this->database);
-            $category->setId($row->id)
-                ->setName($row->name);
-            return $category;
+            $user = new User($this->database);
+            $user->setId($row->id)
+                ->setName($row->name)
+                ->setEmail($row->email)
+                ->setPhone($row->phone);
+            return $user;
         } else {
             return null;
         }

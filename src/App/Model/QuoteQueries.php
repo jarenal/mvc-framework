@@ -4,7 +4,7 @@ namespace Jarenal\App\Model;
 
 use Jarenal\Core\DatabaseInterface;
 
-class CategoryQueries
+class QuoteQueries
 {
     private $database;
 
@@ -15,15 +15,19 @@ class CategoryQueries
 
     public function findById($id)
     {
-        $sql = "SELECT * FROM `category` WHERE id=%s";
+        $sql = "SELECT * FROM `quote` WHERE id=%s";
         $result = $this->database->executeQuery($sql, [$id]);
         $row = $result->fetch_object();
 
         if ($row) {
-            $category = new Category($this->database);
-            $category->setId($row->id)
-                ->setName($row->name);
-            return $category;
+            $userQueries = new UserQueries($this->database);
+            $user = $userQueries->findById($row->user_id);
+            $quote = new Quote($this->database);
+            $quote->setId($row->id)
+                ->setUser($user)
+                ->setReference($row->reference)
+                ->setTotal($row->total);
+            return $quote;
         } else {
             return null;
         }

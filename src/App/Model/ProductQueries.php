@@ -31,4 +31,25 @@ class ProductQueries
         }
         return $products;
     }
+
+    public function findById($id)
+    {
+        $sql = "SELECT * FROM `product` WHERE `id`=%s";
+        $result = $this->database->executeQuery($sql, [$id]);
+        $row = $result->fetch_object();
+
+        if ($row) {
+            $categoryQueries = new CategoryQueries($this->database);
+            $category = $categoryQueries->findById($row->category_id);
+            $product = new Product($this->database);
+            $product->setId($row->id)
+                ->setName($row->name)
+                ->setCategory($category)
+                ->setPrice($row->price)
+                ->setDescription($row->description);
+            return $product;
+        } else {
+            return null;
+        }
+    }
 }

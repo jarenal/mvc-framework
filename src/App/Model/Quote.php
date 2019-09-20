@@ -7,10 +7,11 @@ use Jarenal\Core\ModelInterface;
 
 class Quote extends ModelAbstract implements ModelInterface
 {
-    private $id;
-    private $user;
-    private $reference;
-    private $total;
+    public $id;
+    public $user;
+    public $reference;
+    public $total;
+    public $lines = [];
 
     /**
      * @return mixed
@@ -71,6 +72,12 @@ class Quote extends ModelAbstract implements ModelInterface
      */
     public function getTotal()
     {
+        $this->total = 0;
+        if (is_array($this->lines) && $this->lines) {
+            foreach ($this->lines as $line) {
+                $this->total += $line->getSubtotal();
+            }
+        }
         return $this->total;
     }
 
@@ -84,17 +91,50 @@ class Quote extends ModelAbstract implements ModelInterface
         return $this;
     }
 
+    public function addLine(QuoteLine $line)
+    {
+        if ($this->id) {
+            $line->setQuote($this);
+        }
+        $this->lines[] = $line;
+    }
+
+    public function getLines()
+    {
+        if (!$this->lines && $this->id) {
+            $linesQueries = new QuoteLineQueries($this->database);
+            $this->lines = $linesQueries->findByQuoteId($this->id);
+        }
+
+        return $this->lines;
+    }
+
     public function save()
     {
         $this->database->connect();
 
         if ($this->id) {
             $sql = "UPDATE `quote` SET `user_id`=%s, `reference`=%s, `total`=%s WHERE `id`=%s";
-            $this->database->executeQuery($sql, [$this->getUser()->getId(), $this->reference, $this->total, $this->id]);
+            $this->database->executeQuery(
+                $sql,
+                [$this->getUser()->getId(), $this->reference, $this->getTotal(), $this->id]
+            );
         } else {
             $sql = "INSERT INTO `quote` (`user_id`, `reference`, `total`) VALUES (\"%s\", \"%s\", \"%s\")";
-            $this->database->executeQuery($sql, [$this->getUser()->getId(), $this->reference, $this->total]);
+            $this->database->executeQuery($sql, [$this->getUser()->getId(), $this->reference, $this->getTotal()]);
             $this->id = $this->database->getLastId();
         }
+
+        if (is_array($this->lines) && $this->lines) {
+            foreach ($this->lines as $line) {
+                $line->setQuote($this);
+                $line->save();
+            }
+        }
+    }
+
+    public function __toString()
+    {
+        return (string)$this->reference;
     }
 }

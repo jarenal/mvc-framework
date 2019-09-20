@@ -33,6 +33,7 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -43,7 +44,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Subscription'),(2,'Service'),(3,'Goods');
+INSERT INTO `category` VALUES (1,'Subscription','2019-09-20 08:58:33'),(2,'Service','2019-09-20 08:58:33'),(3,'Goods','2019-09-20 08:58:33');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,6 +61,7 @@ CREATE TABLE `product` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `price` decimal(5,2) NOT NULL,
   `description` varchar(255) COLLATE utf8_bin NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_product_category_idx` (`category_id`),
   CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
@@ -72,7 +74,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,1,'Subscription #1',10.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(2,1,'Subscription #2',20.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(3,2,'Service #1',30.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(4,2,'Service #2',40.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(5,3,'Goods #1',50.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices'),(6,3,'Goods #2',60.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices');
+INSERT INTO `product` VALUES (1,1,'Subscription #1',10.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(2,1,'Subscription #2',20.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(3,2,'Service #1',30.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(4,2,'Service #2',40.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(5,3,'Goods #1',50.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(6,3,'Goods #2',60.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,33 +107,35 @@ LOCK TABLES `quote` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `quote_has_product`
+-- Table structure for table `quote_line`
 --
 
-DROP TABLE IF EXISTS `quote_has_product`;
+DROP TABLE IF EXISTS `quote_line`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `quote_has_product` (
+CREATE TABLE `quote_line` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `quote_id` int(10) unsigned NOT NULL,
   `product_id` int(10) unsigned NOT NULL,
-  `quantity` int(10) unsigned NOT NULL,
   `subtotal` decimal(5,2) unsigned NOT NULL,
-  `metadata` text COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`quote_id`,`product_id`),
-  KEY `fk_quote_has_product_product1_idx` (`product_id`),
-  KEY `fk_quote_has_product_quote1_idx` (`quote_id`),
-  CONSTRAINT `fk_quote_has_product_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `fk_quote_has_product_quote1` FOREIGN KEY (`quote_id`) REFERENCES `quote` (`id`)
+  `quantity` int(10) unsigned NOT NULL,
+  `metadata` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_quote_lines_quote1_idx` (`quote_id`),
+  KEY `fk_quote_lines_product1_idx` (`product_id`),
+  CONSTRAINT `fk_quote_lines_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `fk_quote_lines_quote1` FOREIGN KEY (`quote_id`) REFERENCES `quote` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `quote_has_product`
+-- Dumping data for table `quote_line`
 --
 
-LOCK TABLES `quote_has_product` WRITE;
-/*!40000 ALTER TABLE `quote_has_product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `quote_has_product` ENABLE KEYS */;
+LOCK TABLES `quote_line` WRITE;
+/*!40000 ALTER TABLE `quote_line` DISABLE KEYS */;
+/*!40000 ALTER TABLE `quote_line` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -144,7 +148,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `password` varchar(20) COLLATE utf8_bin NOT NULL,
+  `password` varchar(60) COLLATE utf8_bin NOT NULL,
   `email` varchar(255) COLLATE utf8_bin NOT NULL,
   `phone` varchar(20) COLLATE utf8_bin NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -171,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-17 22:38:36
+-- Dump completed on 2019-09-20  8:58:43

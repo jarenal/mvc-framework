@@ -9,7 +9,7 @@ routes:
     controller: Jarenal\App\Controller\Steps
     action: "step1"
     method: ["GET"]
-    pattern: "/"
+    pattern: "^/$"
   step2:
     controller: Jarenal\App\Controller\Steps
     action: "step2"
@@ -18,7 +18,7 @@ routes:
   step3:
     controller: Jarenal\App\Controller\Steps
     action: "step3"
-    method: ["POST"]
+    method: ["GET", "POST"]
     pattern: "/step3"
   products:
     controller: Jarenal\App\Controller\Api

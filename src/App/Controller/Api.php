@@ -3,6 +3,7 @@
 namespace Jarenal\App\Controller;
 
 use Exception;
+use Jarenal\App\Model\ProductQueries;
 use Jarenal\Core\ControllerAbstract;
 
 class Api extends ControllerAbstract
@@ -12,11 +13,32 @@ class Api extends ControllerAbstract
         header("Content-type: application/json");
 
         try {
-            if (!isset($_POST["product"]) || !is_array($_POST["product"]) || !$_POST["product"]) {
+            if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+                throw new Exception("Request method is not POST", 400);
+            }
+
+            if (!isset($_POST["id"]) || !isset($_POST["quantity"])) {
                 throw new Exception("Product is required", 400);
             }
+
+            $_POST["metadata"] = isset($_POST["metadata"]) ? $_POST["metadata"] : [];
+
+            $productQueries = new ProductQueries($this->database);
+            $product = $productQueries->findById($_POST["id"]);
+
             $cart = $this->session->get("cart", []);
-            $cart[] = $_POST["product"];
+            $item = [];
+            $item["id"] = $_POST["id"];
+            $item["quantity"] = $_POST["quantity"];
+            $item["metadata"] = array_merge(
+                $_POST["metadata"],
+                [
+                    "price" => $product->getPrice(),
+                    "category_id" => $product->getCategory()->getId(),
+                    "category" => $product->getCategory()->getName()
+                ]
+            );
+            $cart[] = $item;
             $this->session->set("cart", $cart);
             $response = ["cart_counter" => count($cart)];
             http_response_code(200);

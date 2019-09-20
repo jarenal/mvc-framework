@@ -2,17 +2,17 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Exception;
 use Jarenal\Core\ModelAbstract;
 use Jarenal\Core\ModelInterface;
 
 class User extends ModelAbstract implements ModelInterface
 {
-    private $id;
-    private $name;
-    private $password;
-    private $email;
-    private $phone;
+    public $id;
+    public $name;
+    public $password;
+    public $email;
+    public $phone;
 
     /**
      * @return mixed
@@ -106,15 +106,22 @@ class User extends ModelAbstract implements ModelInterface
 
     public function save()
     {
-        $this->database->connect();
+        try {
+            $this->database->connect();
 
-        if ($this->id) {
-            $sql = "UPDATE `user` SET `name`=%s, `password`=%s, `email`=%s, `phone`=%s WHERE `id`=%s";
-            $this->database->executeQuery($sql, [$this->name, $this->password, $this->email, $this->phone, $this->id]);
-        } else {
-            $sql = "INSERT INTO `user` (`name`, `password`, `email`, `phone`) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")";
-            $this->database->executeQuery($sql, [$this->name, $this->password, $this->email, $this->phone]);
-            $this->id = $this->database->getLastId();
+            if ($this->id) {
+                $sql = "UPDATE `user` SET `name`=%s, `password`=%s, `email`=%s, `phone`=%s WHERE `id`=%s";
+                $this->database->executeQuery(
+                    $sql,
+                    [$this->name, $this->password, $this->email, $this->phone, $this->id]
+                );
+            } else {
+                $sql = "INSERT INTO `user` (`name`, `password`, `email`, `phone`) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")";
+                $this->database->executeQuery($sql, [$this->name, $this->password, $this->email, $this->phone]);
+                $this->id = $this->database->getLastId();
+            }
+        } catch (Exception $ex) {
+            throw $ex;
         }
     }
 }

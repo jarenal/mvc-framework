@@ -55,10 +55,9 @@
 					<p>Select the dates</p>
 					<form novalidate>
 						<input type="hidden" name="product_id" class="product_id" value=""/>
-						<input type="hidden" name="category" class="category" value=""/>
 						<div class="form-group">
 							<label for="start_date">Start date</label>
-							<input id="start_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="start_date" pattern="([0][1-9]|[12][0-9]|[3][0-1])\/([0][1-9]|[1][0-2])\/\d{4}" required>
+							<input id="start_date" type="text" class="form-control" placeholder="dd/mm/yyyy" name="start_date" required>
 						</div>
 						<div class="form-group">
 							<label for="end_date">End date</label>
@@ -87,7 +86,6 @@
 				<div class="modal-body">
 					<form novalidate>
 						<input type="hidden" name="product_id" class="product_id" value=""/>
-						<input type="hidden" name="category" class="category" value=""/>
 						<div class="form-group">
 							<label for="dayofweek">Day of week</label>
 							<select id="dayofweek" name="dayofweek" class="form-control" required>
@@ -158,6 +156,7 @@
 			</div>
 			<div class="modal-body">
 				<form novalidate>
+					<input type="hidden" name="product_id" class="product_id" value=""/>
 					<div class="form-group">
 						<label for="quantity">Quantity</label>
 						<input id="quantity" type="text" class="form-control" name="quantity">
