@@ -3,7 +3,6 @@
 namespace Jarenal\App\Controller;
 
 use Exception;
-use Jarenal\App\Model\ProductQueries;
 use Jarenal\Core\ControllerAbstract;
 
 class Api extends ControllerAbstract
@@ -23,7 +22,7 @@ class Api extends ControllerAbstract
 
             $_POST["metadata"] = isset($_POST["metadata"]) ? $_POST["metadata"] : [];
 
-            $productQueries = new ProductQueries($this->database);
+            $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
             $product = $productQueries->findById($_POST["id"]);
 
             $cart = $this->session->get("cart", []);

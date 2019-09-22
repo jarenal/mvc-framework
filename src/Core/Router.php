@@ -6,9 +6,11 @@ class Router implements RouterInterface
 {
     private $config;
     private $routes;
+    private $container;
 
-    public function __construct(ConfigInterface $config)
+    public function __construct(Container $container, Config $config)
     {
+        $this->container = $container;
         $this->config = $config;
         $this->routes = $this->config->get("routes");
     }
@@ -21,7 +23,7 @@ class Router implements RouterInterface
                 $_SERVER["REQUEST_METHOD"],
                 $current["method"]
             )) {
-                $route = new Route();
+                $route = $this->container->get("Jarenal\Core\Route");
                 $route->setController($current["controller"])
                     ->setAction($current["action"]);
                 return $route;

@@ -2,17 +2,10 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Jarenal\Core\ModelAbstract;
 
-class QuoteQueries
+class QuoteQueries extends ModelAbstract
 {
-    private $database;
-
-    public function __construct(DatabaseInterface $database)
-    {
-        $this->database = $database;
-    }
-
     public function findById($id)
     {
         $sql = "SELECT * FROM `quote` WHERE id=%s";
@@ -20,9 +13,9 @@ class QuoteQueries
         $row = $result->fetch_object();
 
         if ($row) {
-            $userQueries = new UserQueries($this->database);
+            $userQueries = $this->container->get("Jarenal\App\Model\UserQueries");
             $user = $userQueries->findById($row->user_id);
-            $quote = new Quote($this->database);
+            $quote = $this->container->get("Jarenal\App\Model\Quote");
             $quote->setId($row->id)
                 ->setUser($user)
                 ->setReference($row->reference)

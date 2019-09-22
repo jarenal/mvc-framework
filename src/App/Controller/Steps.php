@@ -3,15 +3,7 @@
 namespace Jarenal\App\Controller;
 
 use Exception;
-use Jarenal\App\Model\ProductQueries;
-use Jarenal\App\Model\Quote;
-use Jarenal\App\Model\QuoteLine;
-use Jarenal\App\Model\QuoteQueries;
-use Jarenal\App\Model\User;
-use Jarenal\Core\Config;
 use Jarenal\Core\ControllerAbstract;
-use Jarenal\Core\Database;
-use mysqli;
 
 class Steps extends ControllerAbstract
 {
@@ -24,9 +16,7 @@ class Steps extends ControllerAbstract
     {
         $cart = $this->session->get("cart", []);
         $this->session->set("user", $_POST["user"]);
-        $config = new Config(PROJECT_ROOT_DIR . "/config/config.yaml");
-        $database = new Database(new mysqli(), $config);
-        $productQueries = new ProductQueries($database);
+        $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
         $products = $productQueries->findAll();
         return $this->view->render(
             "steps/step2.tpl",
@@ -38,32 +28,32 @@ class Steps extends ControllerAbstract
     {
         try {
             if ($_SERVER["REQUEST_METHOD"] === "GET") {
-                $quoteQueries = new QuoteQueries($this->database);
+                $quoteQueries = $this->container->get("Jarenal\App\Model\QuoteQueries");
                 $quote = $quoteQueries->findById($_GET["id"]);
                 $user = $quote->getUser();
             } else {
                 $userData = $this->session->get("user", []);
 
-                $user = new User($this->database);
+                $user = $this->container->get("Jarenal\App\Model\User");
                 $user->setName($userData["name"])
                     ->setPassword($userData["password"])
                     ->setEmail($userData["email"])
                     ->setPhone($userData["phone"])
                     ->save();
 
-                $quote = new Quote($this->database);
+                $quote = $this->container->get("Jarenal\App\Model\Quote");
                 $quote->setUser($user)
                     ->setReference(uniqid("Q-"));
 
                 $cartData = $this->session->get("cart", []);
                 foreach ($cartData as $current) {
                     $item = [];
-                    $productQueries = new ProductQueries($this->database);
+                    $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
                     $product = $productQueries->findById($current["id"]);
                     $item["product"] = $product;
                     $item["quantity"] = $current["quantity"];
                     $item["metadata"] = $current["metadata"];
-                    $line = new QuoteLine($this->database);
+                    $line = $this->container->get("Jarenal\App\Model\QuoteLine");
                     $line->setProduct($item["product"])
                         ->setQuantity($item["quantity"])
                         ->setMetadata($item["metadata"]);

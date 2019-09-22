@@ -102,7 +102,7 @@ class Quote extends ModelAbstract implements ModelInterface
     public function getLines()
     {
         if (!$this->lines && $this->id) {
-            $linesQueries = new QuoteLineQueries($this->database);
+            $linesQueries = $this->container->get("Jarenal\App\Model\QuoteLineQueries");
             $this->lines = $linesQueries->findByQuoteId($this->id);
         }
 

@@ -44,7 +44,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Subscription','2019-09-20 08:58:33'),(2,'Service','2019-09-20 08:58:33'),(3,'Goods','2019-09-20 08:58:33');
+INSERT INTO `category` VALUES (1,'Subscription','2019-09-22 14:18:41'),(2,'Service','2019-09-22 14:18:41'),(3,'Goods','2019-09-22 14:18:41');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,7 +74,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,1,'Subscription #1',10.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(2,1,'Subscription #2',20.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(3,2,'Service #1',30.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(4,2,'Service #2',40.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(5,3,'Goods #1',50.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33'),(6,3,'Goods #2',60.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-20 08:58:33');
+INSERT INTO `product` VALUES (1,1,'Subscription #1',10.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41'),(2,1,'Subscription #2',20.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41'),(3,2,'Service #1',30.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41'),(4,2,'Service #2',40.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41'),(5,3,'Goods #1',50.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41'),(6,3,'Goods #2',60.00,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dictum ante sed eros ultrices','2019-09-22 14:18:41');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `quote` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `reference` varchar(255) COLLATE utf8_bin NOT NULL,
-  `total` decimal(5,2) unsigned NOT NULL,
+  `total` decimal(8,2) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_quote_user1_idx` (`user_id`),
@@ -117,7 +117,7 @@ CREATE TABLE `quote_line` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `quote_id` int(10) unsigned NOT NULL,
   `product_id` int(10) unsigned NOT NULL,
-  `subtotal` decimal(5,2) unsigned NOT NULL,
+  `subtotal` decimal(8,2) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `metadata` json DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -175,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-20  8:58:43
+-- Dump completed on 2019-09-22 14:18:58

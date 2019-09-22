@@ -2,17 +2,10 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Jarenal\Core\ModelAbstract;
 
-class CategoryQueries
+class CategoryQueries extends ModelAbstract
 {
-    private $database;
-
-    public function __construct(DatabaseInterface $database)
-    {
-        $this->database = $database;
-    }
-
     public function findById($id)
     {
         $sql = "SELECT * FROM `category` WHERE id=%s";
@@ -20,7 +13,7 @@ class CategoryQueries
         $row = $result->fetch_object();
 
         if ($row) {
-            $category = new Category($this->database);
+            $category = $this->container->get("Jarenal\App\Model\Category");
             $category->setId($row->id)
                 ->setName($row->name);
             return $category;

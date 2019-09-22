@@ -2,26 +2,19 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Jarenal\Core\ModelAbstract;
 
-class ProductQueries
+class ProductQueries extends ModelAbstract
 {
-    private $database;
-
-    public function __construct(DatabaseInterface $database)
-    {
-        $this->database = $database;
-    }
-
     public function findAll()
     {
         $sql = "SELECT * FROM `product`";
         $result = $this->database->executeQuery($sql);
         $products = [];
         while ($row = $result->fetch_object()) {
-            $categoryQueries = new CategoryQueries($this->database);
+            $categoryQueries = $this->container->get("Jarenal\App\Model\CategoryQueries");
             $category = $categoryQueries->findById($row->category_id);
-            $currentProduct = new Product($this->database);
+            $currentProduct = $this->container->get("Jarenal\App\Model\Product");
             $currentProduct->setId($row->id)
                 ->setName($row->name)
                 ->setCategory($category)
@@ -39,9 +32,9 @@ class ProductQueries
         $row = $result->fetch_object();
 
         if ($row) {
-            $categoryQueries = new CategoryQueries($this->database);
+            $categoryQueries = $this->container->get("Jarenal\App\Model\CategoryQueries");
             $category = $categoryQueries->findById($row->category_id);
-            $product = new Product($this->database);
+            $product = $this->container->get("Jarenal\App\Model\Product");
             $product->setId($row->id)
                 ->setName($row->name)
                 ->setCategory($category)

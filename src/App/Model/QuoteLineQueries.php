@@ -2,28 +2,21 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Jarenal\Core\ModelAbstract;
 
-class QuoteLineQueries
+class QuoteLineQueries extends ModelAbstract
 {
-    private $database;
-
-    public function __construct(DatabaseInterface $database)
-    {
-        $this->database = $database;
-    }
-
     public function findByQuoteId($quote_id)
     {
         $sql = "SELECT * FROM `quote_line` WHERE quote_id=%s";
         $result = $this->database->executeQuery($sql, [$quote_id]);
-        $quoteQueries = new QuoteQueries($this->database);
-        $productQueries = new ProductQueries($this->database);
+        $quoteQueries = $this->container->get("Jarenal\App\Model\QuoteQueries");
+        $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
         $lines = [];
         while ($row = $result->fetch_object()) {
             $quote = $quoteQueries->findById($row->quote_id);
             $product = $productQueries->findById($row->product_id);
-            $line = new QuoteLine($this->database);
+            $line = $this->container->get("Jarenal\App\Model\QuoteLine");
             $line->setId($row->id)
                 ->setQuote($quote)
                 ->setProduct($product)

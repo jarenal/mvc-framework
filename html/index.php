@@ -3,13 +3,19 @@ session_start();
 
 require_once __DIR__."/../vendor/autoload.php";
 
+use Jarenal\Core\Config;
+use Jarenal\Core\Container;
+
 define("PROJECT_ROOT_DIR", __DIR__."/../");
 
-use Jarenal\Core\Config;
-use Jarenal\Core\Kernel;
-use Jarenal\Core\Router;
+$container = new Container();
+$container->add("Jarenal\Core\Config", function () {
+    return new Config(__DIR__."/../config/config.yaml");
+});
+$container->add("mysqli", function () {
+    return new mysqli();
+});
 
-$config = new Config(__DIR__."/../config/config.yaml");
-$router = new Router($config);
-$kernel = new Kernel($router);
+$kernel = $container->get("Jarenal\Core\Kernel");
+
 $kernel->run();

@@ -18,12 +18,10 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm mt-4">
+		<div class="col-12 mt-4">
 			<h3>User details</h3>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm mt-4">
+		<div class="col-12 mt-4">
 			<table class="table">
 				<tbody>
 				<tr>
@@ -43,10 +41,10 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm">
+		<div class="col-12 mt-4">
 			<h3>Quote lines</h3>
 		</div>
-		<div class="col-sm">
+		<div class="col-12 mt-4">
 			<table class="table">
 				<thead>
 				<tr>

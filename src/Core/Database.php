@@ -11,7 +11,7 @@ class Database implements DatabaseInterface
     private $config;
     private $connected;
 
-    public function __construct(mysqli $mysqli, ConfigInterface $config)
+    public function __construct(mysqli $mysqli, Config $config)
     {
         $this->mysqli = $mysqli;
         $this->config = $config;

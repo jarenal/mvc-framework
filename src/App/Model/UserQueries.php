@@ -2,17 +2,10 @@
 
 namespace Jarenal\App\Model;
 
-use Jarenal\Core\DatabaseInterface;
+use Jarenal\Core\ModelAbstract;
 
-class UserQueries
+class UserQueries extends ModelAbstract
 {
-    private $database;
-
-    public function __construct(DatabaseInterface $database)
-    {
-        $this->database = $database;
-    }
-
     public function findById($id)
     {
         $sql = "SELECT * FROM `user` WHERE id=%s";
@@ -20,7 +13,7 @@ class UserQueries
         $row = $result->fetch_object();
 
         if ($row) {
-            $user = new User($this->database);
+            $user = $this->container->get("Jarenal\App\Model\User");
             $user->setId($row->id)
                 ->setName($row->name)
                 ->setEmail($row->email)
