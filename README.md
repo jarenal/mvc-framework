@@ -1,6 +1,6 @@
 # Welcome!
 
-This is a test project using a basic MVC Framework and implementing a basic Dependencies Injection Container, both created from scratch.
+This is a test project using a basic MVC Framework, a basic Template Engine and a basic Dependencies Injection Container, all of them created from scratch.
 
 ## Setup
 
