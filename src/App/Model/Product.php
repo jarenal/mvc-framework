@@ -63,7 +63,7 @@ class Product extends ModelAbstract implements ModelInterface
      * @param Category $category
      * @return Product
      */
-    public function setCategory(Category $category): self
+    public function addCategory(Category $category): self
     {
         $this->category = $category;
         return $this;

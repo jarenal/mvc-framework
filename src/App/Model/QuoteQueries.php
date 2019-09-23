@@ -30,7 +30,7 @@ class QuoteQueries extends ModelAbstract
                 $user = $userQueries->findById((int)$row->user_id);
                 $quote = $this->container->get("Jarenal\App\Model\Quote");
                 $quote->setId((int)$row->id)
-                    ->setUser($user)
+                    ->addUser($user)
                     ->setReference($row->reference)
                     ->setTotal((float)$row->total);
                 return $quote;

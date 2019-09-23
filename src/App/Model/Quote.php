@@ -64,7 +64,7 @@ class Quote extends ModelAbstract implements ModelInterface
      * @param User $user
      * @return $this
      */
-    public function setUser(User $user): self
+    public function addUser(User $user): self
     {
         $this->user = $user;
         return $this;
@@ -118,7 +118,7 @@ class Quote extends ModelAbstract implements ModelInterface
     public function addLine(QuoteLine $line): void
     {
         if ($this->id) {
-            $line->setQuote($this);
+            $line->addQuote($this);
         }
         $this->lines[] = $line;
     }
@@ -163,7 +163,7 @@ class Quote extends ModelAbstract implements ModelInterface
 
             if (is_array($this->lines) && $this->lines) {
                 foreach ($this->lines as $line) {
-                    $line->setQuote($this);
+                    $line->addQuote($this);
                     $line->save();
                 }
             }

@@ -71,7 +71,7 @@ class QuoteLine extends ModelAbstract implements ModelInterface
      * @param Quote $quote
      * @return $this
      */
-    public function setQuote(Quote $quote): self
+    public function addQuote(Quote $quote): self
     {
         $this->quote = $quote;
         return $this;
@@ -89,7 +89,7 @@ class QuoteLine extends ModelAbstract implements ModelInterface
      * @param Product $product
      * @return $this
      */
-    public function setProduct(Product $product): self
+    public function addProduct(Product $product): self
     {
         $this->product = $product;
         return $this;

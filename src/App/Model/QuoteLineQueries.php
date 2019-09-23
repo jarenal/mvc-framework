@@ -30,8 +30,8 @@ class QuoteLineQueries extends ModelAbstract
                 $product = $productQueries->findById((int)$row->product_id);
                 $line = $this->container->get("Jarenal\App\Model\QuoteLine");
                 $line->setId((int)$row->id)
-                    ->setQuote($quote)
-                    ->setProduct($product)
+                    ->addQuote($quote)
+                    ->addProduct($product)
                     ->setSubtotal((float)$row->subtotal)
                     ->setQuantity((int)$row->quantity)
                     ->setMetadata(json_decode($row->metadata, true));

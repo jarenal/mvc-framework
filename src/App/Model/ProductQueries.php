@@ -28,7 +28,7 @@ class ProductQueries extends ModelAbstract
                 $currentProduct = $this->container->get("Jarenal\App\Model\Product");
                 $currentProduct->setId((int)$row->id)
                     ->setName($row->name)
-                    ->setCategory($category)
+                    ->addCategory($category)
                     ->setPrice((float)$row->price)
                     ->setDescription($row->description);
                 $products[] = $currentProduct;
@@ -56,7 +56,7 @@ class ProductQueries extends ModelAbstract
                 $product = $this->container->get("Jarenal\App\Model\Product");
                 $product->setId((int)$row->id)
                     ->setName($row->name)
-                    ->setCategory($category)
+                    ->addCategory($category)
                     ->setPrice((float)$row->price)
                     ->setDescription($row->description);
                 return $product;

@@ -63,7 +63,7 @@ class Steps extends ControllerAbstract
                     ->save();
 
                 $quote = $this->container->get("Jarenal\App\Model\Quote");
-                $quote->setUser($user)
+                $quote->addUser($user)
                     ->setReference(uniqid("Q-"));
 
                 $cartData = $this->session->get("cart", []);
@@ -75,7 +75,7 @@ class Steps extends ControllerAbstract
                     $item["quantity"] = $current["quantity"];
                     $item["metadata"] = $current["metadata"];
                     $line = $this->container->get("Jarenal\App\Model\QuoteLine");
-                    $line->setProduct($item["product"])
+                    $line->addProduct($item["product"])
                         ->setQuantity($item["quantity"])
                         ->setMetadata($item["metadata"]);
                     $quote->addLine($line);
