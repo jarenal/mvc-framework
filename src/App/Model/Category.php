@@ -1,37 +1,48 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\App\Model;
 
 use Jarenal\Core\ModelAbstract;
 use Jarenal\Core\ModelInterface;
 
+/**
+ * Class Category
+ * @package Jarenal\App\Model
+ */
 class Category extends ModelAbstract implements ModelInterface
 {
+    /**
+     * @var int
+     */
     private $id;
+    /**
+     * @var string
+     */
     private $name;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
      * @param mixed $id
      * @return Category
      */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -40,18 +51,24 @@ class Category extends ModelAbstract implements ModelInterface
      * @param mixed $name
      * @return Category
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    public function save()
+    /**
+     *
+     */
+    public function save(): void
     {
         // TODO: Implement save() method.
     }
 
-    public function __toString()
+    /**
+     * @return string
+     */
+    public function __toString(): string
     {
         return (string)strtolower($this->name);
     }

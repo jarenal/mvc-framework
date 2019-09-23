@@ -1,15 +1,27 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
 use Closure;
 use Exception;
 use ReflectionClass;
+use ReflectionParameter;
 
+/**
+ * Class Container
+ * @package Jarenal\Core
+ */
 class Container
 {
-    protected $objects = [];
+    /**
+     * @var array
+     */
+    protected $factories = [];
 
+    /**
+     * Container constructor.
+     */
     public function __construct()
     {
         $self = $this;
@@ -18,41 +30,61 @@ class Container
         });
     }
 
-    public function add($class, $instance = null)
+    /**
+     * @return array
+     */
+    public function getFactories(): array
     {
-        if ($instance === null) {
-            $instance = $class;
-        }
-
-        $this->objects[$class] = $instance;
+        return $this->factories;
     }
 
-    public function get($class, $parameters = [])
+    /**
+     * @param string $class
+     * @param Closure|null $closure
+     */
+    public function add(string $class, Closure $closure = null): void
+    {
+        if ($closure === null) {
+            $closure = $class;
+        }
+
+        $this->factories[$class] = $closure;
+    }
+
+    /**
+     * @param string $class
+     * @param array $parameters
+     * @return object
+     * @throws Exception
+     */
+    public function get(string $class, array $parameters = []): object
     {
         try {
-            if (!isset($this->objects[$class])) {
+            if (!isset($this->factories[$class])) {
                 $this->add($class);
             }
-            return $this->build($this->objects[$class], $parameters);
+            return $this->build($this->factories[$class], $parameters);
         } catch (Exception $ex) {
             throw $ex;
         }
     }
 
-    public function build($instance, $parameters)
+    /**
+     * @param $class
+     * @param array $parameters
+     * @return object
+     * @throws Exception
+     */
+    private function build($class, array $parameters = []): object
     {
         try {
-            if ($instance instanceof Closure) {
-                if (is_callable($instance)) {
-                    return $instance($this, $parameters);
-                } else {
-                    throw new Exception("$instance is not callable");
-                }
+            if ($class instanceof Closure) {
+                return call_user_func_array($class, $parameters);
             }
 
-            $reflector = new ReflectionClass($instance);
+            $reflector = new ReflectionClass($class);
             if (!$reflector->isInstantiable()) {
-                throw new Exception("Class $instance is not instantiable");
+                throw new Exception("Class $class is not instantiable");
             }
 
             $constructor = $reflector->getConstructor();
@@ -60,8 +92,9 @@ class Container
                 return $reflector->newInstance();
             }
 
-            $parameters = $constructor->getParameters();
-            $dependencies = $this->getDependencies($parameters);
+            $constructorParameters = $constructor->getParameters();
+            $mergedParameters = array_replace($constructorParameters, $parameters);
+            $dependencies = $this->getDependencies($mergedParameters);
 
             return $reflector->newInstanceArgs($dependencies);
         } catch (Exception $ex) {
@@ -69,24 +102,31 @@ class Container
         }
     }
 
-    public function getDependencies($parameters)
+    /**
+     * @param array $parameters
+     * @return array
+     * @throws Exception
+     */
+    private function getDependencies(array $parameters): array
     {
         try {
             $dependencies = [];
             foreach ($parameters as $parameter) {
-                $dependency = $parameter->getClass();
-                if ($dependency === null) {
-                    if ($parameter->isDefaultValueAvailable()) {
-                        $dependencies[] = $parameter->getDefaultValue();
-                    } elseif ($parameter->allowsNull()) {
-                        $dependencies[] = null;
-                    } elseif ($parameter->isOptional()) {
-                        $dependencies[] = null;
+                if ($parameter instanceof ReflectionParameter) {
+                    $dependency = $parameter->getClass();
+                    if ($dependency === null) {
+                        if ($parameter->isDefaultValueAvailable()) {
+                            $dependencies[] = $parameter->getDefaultValue();
+                        } elseif ($parameter->allowsNull()) {
+                            $dependencies[] = null;
+                        } else {
+                            throw new Exception("Can't resolve class dependency {$parameter->name}");
+                        }
                     } else {
-                        throw new Exception("Can't resolve class dependency {$parameter->name}");
+                        $dependencies[] = $this->get($dependency->name);
                     }
                 } else {
-                    $dependencies[] = $this->get($dependency->name);
+                    $dependencies[] = $parameter;
                 }
             }
             return $dependencies;

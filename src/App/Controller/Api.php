@@ -1,13 +1,21 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\App\Controller;
 
 use Exception;
 use Jarenal\Core\ControllerAbstract;
 
+/**
+ * Class Api
+ * @package Jarenal\App\Controller
+ */
 class Api extends ControllerAbstract
 {
-    public function products()
+    /**
+     * @return string
+     */
+    public function products(): string
     {
         header("Content-type: application/json");
 
@@ -23,7 +31,7 @@ class Api extends ControllerAbstract
             $_POST["metadata"] = isset($_POST["metadata"]) ? $_POST["metadata"] : [];
 
             $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
-            $product = $productQueries->findById($_POST["id"]);
+            $product = $productQueries->findById((int)$_POST["id"]);
 
             $cart = $this->session->get("cart", []);
             $item = [];

@@ -1,23 +1,46 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
 use Exception;
 use mysqli;
 
+/**
+ * Class Database
+ * @package Jarenal\Core
+ */
 class Database implements DatabaseInterface
 {
+    /**
+     * @var mysqli
+     */
     private $mysqli;
+    /**
+     * @var Config
+     */
     private $config;
+    /**
+     * @var bool
+     */
     private $connected;
 
+    /**
+     * Database constructor.
+     * @param mysqli $mysqli
+     * @param Config $config
+     */
     public function __construct(mysqli $mysqli, Config $config)
     {
         $this->mysqli = $mysqli;
         $this->config = $config;
     }
 
-    public function connect()
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function connect(): bool
     {
         try {
             $db = $this->config->get("database");
@@ -27,7 +50,7 @@ class Database implements DatabaseInterface
                 $db["username"],
                 $db["password"],
                 $db["name"],
-                $db["port"]
+                (int)$db["port"]
             );
 
             if ($this->mysqli->connect_errno) {
@@ -40,7 +63,10 @@ class Database implements DatabaseInterface
         }
     }
 
-    public function close()
+    /**
+     * @throws Exception
+     */
+    public function close(): void
     {
         try {
             $close = $this->mysqli->close();
@@ -52,7 +78,13 @@ class Database implements DatabaseInterface
         }
     }
 
-    public function executeQuery($sql, $params = [])
+    /**
+     * @param string $sql
+     * @param array $params
+     * @return bool|\mysqli_result
+     * @throws Exception
+     */
+    public function executeQuery(string $sql, array $params = [])
     {
         try {
             if (!$this->connected) {
@@ -63,7 +95,7 @@ class Database implements DatabaseInterface
                 $clean_params = array();
                 foreach ($params as $value) {
                     // Prevent SQL Injection
-                    $clean_params[] = $this->mysqli->real_escape_string($value);
+                    $clean_params[] = $this->mysqli->real_escape_string((string)$value);
                 }
 
                 $sql = vsprintf($sql, $clean_params);
@@ -80,7 +112,10 @@ class Database implements DatabaseInterface
         }
     }
 
-    public function getLastId()
+    /**
+     * @return int
+     */
+    public function getLastId(): int
     {
         return $this->mysqli->insert_id;
     }

@@ -5,26 +5,47 @@ namespace Jarenal\App\Controller;
 use Exception;
 use Jarenal\Core\ControllerAbstract;
 
+/**
+ * Class Steps
+ * @package Jarenal\App\Controller
+ */
 class Steps extends ControllerAbstract
 {
-    public function step1()
+    /**
+     * @return string
+     */
+    public function step1(): string
     {
-        return $this->view->render("steps/step1.tpl", ["title" => "Step #1"]);
+        try {
+            return $this->view->render("steps/step1.tpl", ["title" => "Step #1"]);
+        } catch (Exception $ex) {
+            return $this->view->render("error/message.tpl", ["message" => $ex->getMessage()]);
+        }
     }
 
-    public function step2()
+    /**
+     * @return string
+     */
+    public function step2(): string
     {
-        $cart = $this->session->get("cart", []);
-        $this->session->set("user", $_POST["user"]);
-        $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
-        $products = $productQueries->findAll();
-        return $this->view->render(
-            "steps/step2.tpl",
-            ["title" => "Step #2", "products" => $products, "cart_counter" => count($cart)]
-        );
+        try {
+            $cart = $this->session->get("cart", []);
+            $this->session->set("user", $_POST["user"]);
+            $productQueries = $this->container->get("Jarenal\App\Model\ProductQueries");
+            $products = $productQueries->findAll();
+            return $this->view->render(
+                "steps/step2.tpl",
+                ["title" => "Step #2", "products" => $products, "cart_counter" => count($cart)]
+            );
+        } catch (Exception $ex) {
+            return $this->view->render("error/message.tpl", ["message" => $ex->getMessage()]);
+        }
     }
 
-    public function step3()
+    /**
+     * @return string
+     */
+    public function step3(): string
     {
         try {
             if ($_SERVER["REQUEST_METHOD"] === "GET") {

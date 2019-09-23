@@ -1,13 +1,32 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
+/**
+ * Class Router
+ * @package Jarenal\Core
+ */
 class Router implements RouterInterface
 {
+    /**
+     * @var Config
+     */
     private $config;
+    /**
+     * @var mixed|null
+     */
     private $routes;
+    /**
+     * @var Container
+     */
     private $container;
 
+    /**
+     * Router constructor.
+     * @param Container $container
+     * @param Config $config
+     */
     public function __construct(Container $container, Config $config)
     {
         $this->container = $container;
@@ -15,6 +34,10 @@ class Router implements RouterInterface
         $this->routes = $this->config->get("routes");
     }
 
+    /**
+     * @return RouteInterface
+     * @throws \Exception
+     */
     public function getRoute(): RouteInterface
     {
         foreach ($this->routes as $current) {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\App\Model;
 
@@ -9,73 +10,95 @@ use Exception;
 use Jarenal\Core\ModelAbstract;
 use Jarenal\Core\ModelInterface;
 
+/**
+ * Class QuoteLine
+ * @package Jarenal\App\Model
+ */
 class QuoteLine extends ModelAbstract implements ModelInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+    /**
+     * @var Quote
+     */
     public $quote;
+    /**
+     * @var Product
+     */
     public $product;
+    /**
+     * @var float
+     */
     public $subtotal;
+    /**
+     * @var int
+     */
     public $quantity;
+    /**
+     * @var array
+     */
     public $metadata;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
-     * @return QuoteLine
+     * @param int $id
+     * @return $this
      */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Quote
      */
-    public function getQuote()
+    public function getQuote(): Quote
     {
         return $this->quote;
     }
 
     /**
-     * @param mixed $quote
-     * @return QuoteLine
+     * @param Quote $quote
+     * @return $this
      */
-    public function setQuote(Quote $quote)
+    public function setQuote(Quote $quote): self
     {
         $this->quote = $quote;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Product
      */
-    public function getProduct()
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
     /**
-     * @param mixed $product
-     * @return QuoteLine
+     * @param Product $product
+     * @return $this
      */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): self
     {
         $this->product = $product;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getSubtotal()
+    public function getSubtotal(): float
     {
         switch ($this->metadata["category_id"]) {
             case 1:
@@ -96,79 +119,89 @@ class QuoteLine extends ModelAbstract implements ModelInterface
     }
 
     /**
-     * @param mixed $subtotal
-     * @return QuoteLine
+     * @param float $subtotal
+     * @return $this
      */
-    public function setSubtotal($subtotal)
+    public function setSubtotal(float $subtotal)
     {
         $this->subtotal = $subtotal;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getQuantity()
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
 
     /**
-     * @param mixed $quantity
-     * @return QuoteLine
+     * @param float $quantity
+     * @return $this
      */
-    public function setQuantity($quantity)
+    public function setQuantity(float $quantity): self
     {
         $this->quantity = $quantity;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
 
     /**
-     * @param mixed $metadata
-     * @return QuoteLine
+     * @param array $metadata
+     * @return $this
      */
-    public function setMetadata($metadata)
+    public function setMetadata(array $metadata): self
     {
         $this->metadata = $metadata;
         return $this;
     }
 
-    public function save()
+    /**
+     * @throws Exception
+     */
+    public function save(): void
     {
-        $this->database->connect();
+        try {
+            $this->database->connect();
 
-        if ($this->id) {
-            $sql = "UPDATE `quote_line` SET `quote_id`=%s, `product_id`=%s, `subtotal`=%s, `quantity`=%s, `metadata`=%s WHERE `id`=%s";
-            $this->database->executeQuery($sql, [
-                $this->getQuote()->getId(),
-                $this->getProduct()->getId(),
-                $this->getSubtotal(),
-                $this->quantity,
-                json_encode($this->metadata),
-                $this->id
-            ]);
-        } else {
-            $sql = "INSERT INTO `quote_line` (`quote_id`, `product_id`, `subtotal`, `quantity`, `metadata`) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")";
-            $this->database->executeQuery($sql, [
-                $this->getQuote()->getId(),
-                $this->getProduct()->getId(),
-                $this->getSubtotal(),
-                $this->quantity,
-                json_encode($this->metadata)
-            ]);
-            $this->id = $this->database->getLastId();
+            if ($this->id) {
+                $sql = "UPDATE `quote_line` SET `quote_id`=%s, `product_id`=%s, `quantity`=%s, `subtotal`=%s, `metadata`=%s WHERE `id`=%s";
+                $this->database->executeQuery($sql, [
+                    $this->getQuote()->getId(),
+                    $this->getProduct()->getId(),
+                    $this->getSubtotal(),
+                    $this->quantity,
+                    json_encode($this->metadata),
+                    $this->id
+                ]);
+            } else {
+                $sql = "INSERT INTO `quote_line` (`quote_id`, `product_id`, `subtotal`, `quantity`, `metadata`) VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")";
+                $this->database->executeQuery($sql, [
+                    $this->getQuote()->getId(),
+                    $this->getProduct()->getId(),
+                    $this->getSubtotal(),
+                    $this->quantity,
+                    json_encode($this->metadata)
+                ]);
+                $this->id = $this->database->getLastId();
+            }
+        } catch (Exception $ex) {
+            throw $ex;
         }
     }
 
-    private function getSubtotalForSubscription()
+    /**
+     * @return float
+     */
+    private function getSubtotalForSubscription(): float
     {
         try {
             $endDate = new DateTime($this->formateDate($this->metadata["end_date"]));
@@ -187,17 +220,27 @@ class QuoteLine extends ModelAbstract implements ModelInterface
         }
     }
 
-    private function getSubtotalForService()
+    /**
+     * @return float
+     */
+    private function getSubtotalForService(): float
     {
         return (((float)$this->metadata["end_time"] - (float)$this->metadata["start_time"]) * (float)$this->metadata["weeks"]) * (float)$this->metadata["price"];
     }
 
-    private function getSubtotalForGoods()
+    /**
+     * @return float
+     */
+    private function getSubtotalForGoods(): float
     {
         return (float)$this->quantity * (float)$this->metadata["price"];
     }
 
-    private function formateDate($date)
+    /**
+     * @param $date
+     * @return string
+     */
+    private function formateDate($date): string
     {
         $dateArray = explode("/", $date);
         return $dateArray[2] . "-" . $dateArray[1] . "-" . $dateArray[0];

@@ -1,10 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
+/**
+ * Class View
+ * @package Jarenal\Core
+ */
 class View implements ViewInterface
 {
-    public function render($template, array $data)
+    /**
+     * @param string $template
+     * @param array $data
+     * @return string
+     */
+    public function render(string $template, array $data): string
     {
         if (strpos($template, ".tpl")) {
             $html = file_get_contents(PROJECT_ROOT_DIR . "/templates/" . $template);
@@ -29,7 +39,12 @@ class View implements ViewInterface
         return $output;
     }
 
-    private function parseForeachBlocks($template, $data)
+    /**
+     * @param string $template
+     * @param array $data
+     * @return string
+     */
+    private function parseForeachBlocks(string $template, array $data): string
     {
         $matches = [];
         preg_match('/{% foreach\((\w+) as (\w+)\) %}\n([\s\S]+){% endforeach %}/', $template, $matches);
@@ -66,7 +81,12 @@ class View implements ViewInterface
         return $template;
     }
 
-    public function parseSwitchBlocks($template, $data)
+    /**
+     * @param string $template
+     * @param array $data
+     * @return string
+     */
+    public function parseSwitchBlocks(string $template, array $data): string
     {
         preg_match("/{% switch ([\w.]+) %}[\s\S]+{% endswitch %}/", $template, $matches);
 
@@ -108,7 +128,14 @@ class View implements ViewInterface
         return $template;
     }
 
-    private function multiArrayKeyExist($pathKeys, $array, $levelMax, $currentLevel = 0)
+    /**
+     * @param array $pathKeys
+     * @param array $array
+     * @param int $levelMax
+     * @param int $currentLevel
+     * @return bool
+     */
+    private function multiArrayKeyExist(array $pathKeys, array $array, int $levelMax, int $currentLevel = 0): bool
     {
         $currentKey = array_shift($pathKeys);
         if (array_key_exists($currentKey, $array)) {
@@ -123,7 +150,12 @@ class View implements ViewInterface
         }
     }
 
-    private function getValueFromDotNotation($path, $array)
+    /**
+     * @param array $path
+     * @param array $array
+     * @return array|mixed
+     */
+    private function getValueFromDotNotation(array $path, array $array)
     {
         $current = $array;
         foreach ($path as $key) {

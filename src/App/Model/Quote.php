@@ -1,31 +1,52 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\App\Model;
 
+use Exception;
 use Jarenal\Core\ModelAbstract;
 use Jarenal\Core\ModelInterface;
 
+/**
+ * Class Quote
+ * @package Jarenal\App\Model
+ */
 class Quote extends ModelAbstract implements ModelInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+    /**
+     * @var User
+     */
     public $user;
+    /**
+     * @var string
+     */
     public $reference;
+    /**
+     * @var float
+     */
     public $total;
+    /**
+     * @var array
+     */
     public $lines = [];
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
-     * @return Quote
+     * @param int $id
+     * @return $this
      */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
@@ -40,37 +61,37 @@ class Quote extends ModelAbstract implements ModelInterface
     }
 
     /**
-     * @param mixed $user
-     * @return Quote
+     * @param User $user
+     * @return $this
      */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getReference()
+    public function getReference(): string
     {
         return $this->reference;
     }
 
     /**
-     * @param mixed $reference
-     * @return Quote
+     * @param string $reference
+     * @return $this
      */
-    public function setReference($reference)
+    public function setReference(string $reference): self
     {
         $this->reference = $reference;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getTotal()
+    public function getTotal(): float
     {
         $this->total = 0;
         if (is_array($this->lines) && $this->lines) {
@@ -82,16 +103,19 @@ class Quote extends ModelAbstract implements ModelInterface
     }
 
     /**
-     * @param mixed $total
-     * @return Quote
+     * @param float $total
+     * @return $this
      */
-    public function setTotal($total)
+    public function setTotal(float $total): self
     {
         $this->total = $total;
         return $this;
     }
 
-    public function addLine(QuoteLine $line)
+    /**
+     * @param QuoteLine $line
+     */
+    public function addLine(QuoteLine $line): void
     {
         if ($this->id) {
             $line->setQuote($this);
@@ -99,41 +123,59 @@ class Quote extends ModelAbstract implements ModelInterface
         $this->lines[] = $line;
     }
 
-    public function getLines()
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getLines(): array
     {
-        if (!$this->lines && $this->id) {
-            $linesQueries = $this->container->get("Jarenal\App\Model\QuoteLineQueries");
-            $this->lines = $linesQueries->findByQuoteId($this->id);
-        }
-
-        return $this->lines;
-    }
-
-    public function save()
-    {
-        $this->database->connect();
-
-        if ($this->id) {
-            $sql = "UPDATE `quote` SET `user_id`=%s, `reference`=%s, `total`=%s WHERE `id`=%s";
-            $this->database->executeQuery(
-                $sql,
-                [$this->getUser()->getId(), $this->reference, $this->getTotal(), $this->id]
-            );
-        } else {
-            $sql = "INSERT INTO `quote` (`user_id`, `reference`, `total`) VALUES (\"%s\", \"%s\", \"%s\")";
-            $this->database->executeQuery($sql, [$this->getUser()->getId(), $this->reference, $this->getTotal()]);
-            $this->id = $this->database->getLastId();
-        }
-
-        if (is_array($this->lines) && $this->lines) {
-            foreach ($this->lines as $line) {
-                $line->setQuote($this);
-                $line->save();
+        try {
+            if (!$this->lines && $this->id) {
+                $linesQueries = $this->container->get("Jarenal\App\Model\QuoteLineQueries");
+                $this->lines = $linesQueries->findByQuoteId($this->id);
             }
+
+            return $this->lines;
+        } catch (Exception $ex) {
+            throw $ex;
         }
     }
 
-    public function __toString()
+    /**
+     * @throws Exception
+     */
+    public function save(): void
+    {
+        try {
+            $this->database->connect();
+
+            if ($this->id) {
+                $sql = "UPDATE `quote` SET `user_id`=%s, `reference`=%s, `total`=%s WHERE `id`=%s";
+                $this->database->executeQuery(
+                    $sql,
+                    [$this->getUser()->getId(), $this->reference, $this->getTotal(), $this->id]
+                );
+            } else {
+                $sql = "INSERT INTO `quote` (`user_id`, `reference`, `total`) VALUES (\"%s\", \"%s\", \"%s\")";
+                $this->database->executeQuery($sql, [$this->getUser()->getId(), $this->reference, $this->getTotal()]);
+                $this->id = $this->database->getLastId();
+            }
+
+            if (is_array($this->lines) && $this->lines) {
+                foreach ($this->lines as $line) {
+                    $line->setQuote($this);
+                    $line->save();
+                }
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
     {
         return (string)$this->reference;
     }

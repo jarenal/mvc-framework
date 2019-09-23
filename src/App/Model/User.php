@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\App\Model;
 
@@ -6,105 +7,127 @@ use Exception;
 use Jarenal\Core\ModelAbstract;
 use Jarenal\Core\ModelInterface;
 
+/**
+ * Class User
+ * @package Jarenal\App\Model
+ */
 class User extends ModelAbstract implements ModelInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $password;
+    /**
+     * @var string
+     */
     public $email;
+    /**
+     * @var string
+     */
     public $phone;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
-     * @return User
+     * @param int $id
+     * @return $this
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
-     * @return User
+     * @param string $name
+     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
-     * @param mixed $password
-     * @return User
+     * @param string $password
+     * @return $this
      */
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     /**
-     * @param mixed $email
-     * @return User
+     * @param string $email
+     * @return $this
      */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPhone()
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
     /**
-     * @param mixed $phone
-     * @return User
+     * @param string $phone
+     * @return $this
      */
-    public function setPhone($phone)
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
         return $this;
     }
 
-    public function save()
+    /**
+     * @throws Exception
+     */
+    public function save(): void
     {
         try {
             $this->database->connect();

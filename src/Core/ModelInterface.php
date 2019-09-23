@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
 interface ModelInterface
 {
-    public function save();
+    public function save(): void;
 }

@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
 interface RouteInterface
 {
-    public function setController($controller);
+    public function setController(string $controller): self;
 
-    public function getController();
+    public function getController(): string;
 
-    public function setAction($action);
+    public function setAction(string $action): self;
 
-    public function getAction();
+    public function getAction(): string;
 }

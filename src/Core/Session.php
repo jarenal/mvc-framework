@@ -1,15 +1,29 @@
 <?php
+declare(strict_types=1);
 
 namespace Jarenal\Core;
 
+/**
+ * Class Session
+ * @package Jarenal\Core
+ */
 class Session implements SessionInterface
 {
 
-    public function set($param, $value)
+    /**
+     * @param $param
+     * @param $value
+     */
+    public function set($param, $value): void
     {
         $_SESSION[$param] = $value;
     }
 
+    /**
+     * @param $param
+     * @param $default
+     * @return mixed
+     */
     public function get($param, $default)
     {
         if (isset($_SESSION[$param])) {
@@ -19,6 +33,10 @@ class Session implements SessionInterface
         }
     }
 
+    /**
+     * @param $param
+     * @return bool
+     */
     public function has($param): bool
     {
         return isset($_SESSION[$param]) ? true : false;
