@@ -52,6 +52,7 @@
 					<th scope="col">Product</th>
 					<th scope="col">Category</th>
 					<th scope="col">Quantity</th>
+					<th scope="col">Price</th>
 					<th scope="col">Subtotal</th>
 				</tr>
 				</thead>
@@ -62,6 +63,7 @@
 					<td>{line.product}</td>
 					<td>{line.metadata.category}</td>
 					<td>{line.quantity}</td>
+					<td>&pound;{line.metadata.price}</td>
 					<td>&pound;{line.subtotal}</td>
 				</tr>
                 <tr>
