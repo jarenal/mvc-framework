@@ -4,6 +4,8 @@ This is a test project using a basic MVC Framework, a basic Template Engine and 
 
 ## Setup
 
+#### Using Docker (Recommended)
+
 Clone or download the project in a folder and then install dependencies using composer:
 
 ```bash
@@ -21,17 +23,65 @@ Then open in your browser the next url:
 
 http://localhost:8080
 
-NOTICE: The database is automatically imported when you are using Docker, but if you need to import the database manually you will find the dump at ./tools/schema/dump.sql
+>NOTICE: The database is automatically imported when you are using Docker, but if you need to import the database manually you will find the dump at ./tools/schema/dump.sql
+
+#### Using Apache (Optional: Only if you don't use Docker)
+
+1- Create a vhost for Apache (optional)
+
+Go to 
+
+```bash
+./tools/apache/vhost.conf
+```
+
+For to copy the template for to create your own vhost.
+
+Remember to modify the paths properly for to fit with your file system.
+
+>NOTICE: Remember reload or restart Apache.
+
+2- Import database dump.
+
+You need import into your MySQL database the dump located at 
+
+```bash
+./tools/schema/dump.sql
+``` 
+
+3- Setup config
+
+Modify the config.yaml file located at
+
+```bash
+./config/config.yaml
+```
+
+You will need to modify the next parameters with yours:
+
+```yaml
+database:
+  host: "localhost"
+  username: "test"
+  password: "1234"
+  name: "web-test"
+  port: "3306"
+```
+
+4- Enjoy!
+
+Finally open in your favourite browser the URL to the vhost defined in your Apache and enjoy!
+
 
 ## Open previous quotes
 
-You can see previous quotes passing their id or reference:
+When you create a quote you can opening it again passing their id or reference:
 
-by id:
+For example you can pass its primary key 'id':
 
 http://localhost:8080/step3?id=1
 
-or by rererence:
+or using its unique rererence:
 
 http://localhost:8080/step3?reference=Q-5d8a1cbfc7585
 
