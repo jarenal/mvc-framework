@@ -204,20 +204,26 @@ class QuoteLine extends ModelAbstract implements ModelInterface
     private function getSubtotalForSubscription(): float
     {
         try {
-            $endDate = new DateTime($this->formateDate($this->metadata["end_date"]));
-            $startDate = new DateTime($this->formateDate($this->metadata["start_date"]));
-            $totalDays = $endDate->diff($startDate)->days;
-            $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
-            foreach ($period as $day) {
-                $current = $day->format('N');
-                if ($current == 6 || $current == 7) {
-                    $totalDays--;
-                }
-            }
+            $totalDays = $this->getNumDaysBetweenDates($this->metadata["start_date"], $this->metadata["end_date"]);
             return (float)$totalDays * (float)$this->metadata["price"];
         } catch (Exception $e) {
             return 0;
         }
+    }
+
+    public function getNumDaysBetweenDates(string $start_date, string $end_date): int
+    {
+        $endDate = new DateTime($this->formateDate($end_date));
+        $startDate = new DateTime($this->formateDate($start_date));
+        $totalDays = $endDate->diff($startDate)->days;
+        $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+        foreach ($period as $day) {
+            $current = $day->format('N');
+            if ($current == 6 || $current == 7) {
+                $totalDays--;
+            }
+        }
+        return ++$totalDays;
     }
 
     /**

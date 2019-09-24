@@ -72,11 +72,12 @@
 							{% case 1 %}
 								<div class="ml-5">
 									Start date: {line.metadata.start_date}<br>
-									End date: {line.metadata.end_date}
+									End date: {line.metadata.end_date}<br>
+									Total days: {line.metadata.total_days}
 								</div>
 							{% case 2 %}
 								<div class="ml-5">
-					                Day of week: {line.metadata.dayofweek}<br>
+					                Day of week: {line.metadata.dayofweek_name}<br>
 					                Start time: {line.metadata.start_time}:00<br>
 					                End time: {line.metadata.end_time}:00<br>
 					                Weeks: {line.metadata.weeks}

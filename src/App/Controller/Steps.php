@@ -49,9 +49,17 @@ class Steps extends ControllerAbstract
     {
         try {
             if ($_SERVER["REQUEST_METHOD"] === "GET") {
-                $quoteQueries = $this->container->get("Jarenal\App\Model\QuoteQueries");
-                $quote = $quoteQueries->findById($_GET["id"]);
-                $user = $quote->getUser();
+                if (isset($_GET["id"])) {
+                    $quoteQueries = $this->container->get("Jarenal\App\Model\QuoteQueries");
+                    $quote = $quoteQueries->findById($_GET["id"]);
+                    $user = $quote->getUser();
+                } elseif (isset($_GET["reference"])) {
+                    $quoteQueries = $this->container->get("Jarenal\App\Model\QuoteQueries");
+                    $quote = $quoteQueries->findByReference($_GET["reference"]);
+                    $user = $quote->getUser();
+                } else {
+                    throw new Exception("'id' or 'reference' parameter is missing on query string");
+                }
             } else {
                 $userData = $this->session->get("user", []);
 
@@ -74,7 +82,16 @@ class Steps extends ControllerAbstract
                     $item["product"] = $product;
                     $item["quantity"] = $current["quantity"];
                     $item["metadata"] = $current["metadata"];
+                    if (isset($item["metadata"]["dayofweek"])) {
+                        $item["metadata"]["dayofweek_name"] = date('l', strtotime("Sunday +{$item["metadata"]["dayofweek"]} days"));
+                    }
+
                     $line = $this->container->get("Jarenal\App\Model\QuoteLine");
+
+                    if (isset($item["metadata"]["start_date"]) && isset($item["metadata"]["end_date"])) {
+                        $item["metadata"]["total_days"] = $line->getNumDaysBetweenDates($item["metadata"]["start_date"], $item["metadata"]["end_date"]);
+                    }
+
                     $line->addProduct($item["product"])
                         ->setQuantity($item["quantity"])
                         ->setMetadata($item["metadata"]);
