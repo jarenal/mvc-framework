@@ -23,6 +23,25 @@ http://localhost:8080
 
 NOTICE: The database is automatically imported when you are using Docker, but if you need to import the database manually you will find the dump at ./tools/schema/dump.sql
 
+## Open previous quotes
+
+You can see previous quotes passing their id or reference:
+
+by id:
+
+http://localhost:8080/step3?id=1
+
+or by rererence:
+
+http://localhost:8080/step3?reference=Q-5d8a1cbfc7585
+
+## Tests
+
+For to run Unit Tests execute the next command:
+
+```bash
+$ ./vendor/phpunit/phpunit/phpunit tests
+```
 ## Authors
 
 * **Jose Antonio** - *Initial work*
