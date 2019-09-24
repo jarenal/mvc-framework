@@ -1,0 +1,27 @@
+database:
+  host: "localhost"
+  username: "root"
+  password: "1234"
+  name: "web-test"
+  port: "3306"
+routes:
+  step1:
+    controller: Jarenal\App\Controller\Steps
+    action: "step1"
+    method: ["GET"]
+    pattern: "^/$"
+  step2:
+    controller: Jarenal\App\Controller\Steps
+    action: "step2"
+    method: ["GET", "POST"]
+    pattern: "/step2"
+  step3:
+    controller: Jarenal\App\Controller\Steps
+    action: "step3"
+    method: ["GET", "POST"]
+    pattern: "/step3"
+  products:
+    controller: Jarenal\App\Controller\Api
+    action: "products"
+    method: ["POST"]
+    pattern: "/api/products"
