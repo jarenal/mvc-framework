@@ -23,14 +23,14 @@ class Database implements DatabaseInterface
     /**
      * @var bool
      */
-    private $connected;
+    private $connected = false;
 
     /**
      * Database constructor.
      * @param mysqli $mysqli
      * @param Config $config
      */
-    public function __construct(mysqli $mysqli, Config $config)
+    public function __construct(MysqliWrapper $mysqli, Config $config)
     {
         $this->mysqli = $mysqli;
         $this->config = $config;
@@ -53,7 +53,7 @@ class Database implements DatabaseInterface
                 (int)$db["port"]
             );
 
-            if ($this->mysqli->connect_errno) {
+            if ($this->connected === false && $this->mysqli->connect_errno) {
                 throw new Exception("Connection failure: " . $this->mysqli->connect_error);
             }
 
@@ -87,7 +87,7 @@ class Database implements DatabaseInterface
     public function executeQuery(string $sql, array $params = [])
     {
         try {
-            if (!$this->connected) {
+            if (!$this->isConnected()) {
                 $this->connect();
             }
 
@@ -118,5 +118,13 @@ class Database implements DatabaseInterface
     public function getLastId(): int
     {
         return $this->mysqli->insert_id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConnected(): bool
+    {
+        return $this->connected;
     }
 }

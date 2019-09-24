@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jarenal\Core;
 
+use Exception;
+
 /**
  * Class Router
  * @package Jarenal\Core
@@ -35,22 +37,28 @@ class Router implements RouterInterface
     }
 
     /**
-     * @return RouteInterface
-     * @throws \Exception
+     * @return object|null
+     * @throws Exception
      */
-    public function getRoute(): RouteInterface
+    public function getRoute()
     {
-        foreach ($this->routes as $current) {
-            $pattern = str_replace("/", "\/", $current["pattern"]);
-            if (preg_match("/" . $pattern . "/", $_SERVER["REQUEST_URI"]) && in_array(
-                $_SERVER["REQUEST_METHOD"],
-                $current["method"]
-            )) {
-                $route = $this->container->get("Jarenal\Core\Route");
-                $route->setController($current["controller"])
-                    ->setAction($current["action"]);
-                return $route;
+        try {
+            foreach ($this->routes as $current) {
+                $pattern = str_replace("/", "\/", $current["pattern"]);
+                if (preg_match("/" . $pattern . "/", $_SERVER["REQUEST_URI"]) && in_array(
+                    $_SERVER["REQUEST_METHOD"],
+                    $current["method"]
+                )) {
+                    $route = $this->container->get("Jarenal\Core\Route");
+                    $route->setController($current["controller"])
+                        ->setAction($current["action"]);
+                    return $route;
+                }
             }
+
+            return null;
+        } catch (Exception $ex) {
+            throw $ex;
         }
     }
 }

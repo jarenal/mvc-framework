@@ -18,4 +18,4 @@ $container->add("mysqli", function () {
 
 $kernel = $container->get("Jarenal\Core\Kernel");
 
-$kernel->run();
+die($kernel->run());

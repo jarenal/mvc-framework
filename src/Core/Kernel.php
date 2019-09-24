@@ -40,8 +40,7 @@ class Kernel implements KernelInterface
         try {
             $route = $this->router->getRoute();
             $controller = $this->container->get($route->getController());
-            $output = call_user_func([$controller, $route->getAction()]);
-            exit($output);
+            return call_user_func([$controller, $route->getAction()]);
         } catch (Exception $ex) {
             throw $ex;
         }
