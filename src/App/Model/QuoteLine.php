@@ -215,15 +215,22 @@ class QuoteLine extends ModelAbstract implements ModelInterface
     {
         $endDate = new DateTime($this->formateDate($end_date));
         $startDate = new DateTime($this->formateDate($start_date));
-        $totalDays = $endDate->diff($startDate)->days;
+        $totalDays = $endDate->diff($startDate)->days + 1;
         $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+        $weekendDays = 0;
         foreach ($period as $day) {
-            $current = $day->format('N');
-            if ($current == 6 || $current == 7) {
-                $totalDays--;
+            $current = $day->format("N");
+            if (in_array($current, [6, 7])) {
+                $weekendDays++;
             }
         }
-        return ++$totalDays;
+
+        if (in_array($endDate->format("N"), [6, 7])) {
+            $weekendDays++;
+        }
+
+        $workDays = $totalDays - $weekendDays;
+        return $workDays;
     }
 
     /**
